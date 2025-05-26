@@ -1,11 +1,8 @@
-
-# this is a demo of using the production cypht image
-
 services:
   db:
     image: mariadb:10
     ports:
-      - "3306:3306"
+      - '3306:3306'
     volumes:
       - ./data/mysql:/var/lib/mysql
     environment:
@@ -13,12 +10,14 @@ services:
       - MYSQL_DATABASE=cypht
       - MYSQL_USER=cypht
       - MYSQL_PASSWORD=cypht_password
+    networks:
+      - dokploy-network  # Added this line
+    restart: unless-stopped
+    
   cypht:
     image: cypht/cypht:2.4.0
     ports:
-      - "8030:80"
-    # env_file:
-    #  - /etc/cypht-prod.env
+      - '8030:80'
     environment:
       - AUTH_USERNAME=admin
       - AUTH_PASSWORD=admin
@@ -30,3 +29,12 @@ services:
       - DB_PASS=cypht_password
       - SESSION_TYPE=DB
       - USER_CONFIG_TYPE=DB
+    networks:
+      - dokploy-network
+    depends_on:
+      - db  # Added dependency
+    restart: unless-stopped
+    
+networks:
+  dokploy-network:
+    external: true
