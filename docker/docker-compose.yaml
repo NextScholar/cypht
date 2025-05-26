@@ -16,7 +16,7 @@ services:
   cypht:
     image: cypht/cypht:2.4.0
     ports:
-      - "80:80"
+      - "8030:80"
     # env_file:
     #  - /etc/cypht-prod.env
     environment:
